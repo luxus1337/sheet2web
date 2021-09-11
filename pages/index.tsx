@@ -1,7 +1,7 @@
-import type { GetStaticProps, GetStaticPropsResult, NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import type { GetStaticProps, GetStaticPropsResult, NextPage } from "next"
+import Head from "next/head"
+import Image from "next/image"
+import styles from "../styles/Home.module.css"
 
 type HomeProps = {
 	company: {
@@ -11,8 +11,8 @@ type HomeProps = {
 		mission: string;
 		vision: string;
 		logo: string;
-	},
-	sheetUrl: string
+	};
+	sheetUrl: string;
 }
 
 const Home: NextPage<HomeProps> = ({
@@ -25,64 +25,63 @@ const Home: NextPage<HomeProps> = ({
 		logo,
 	},
 	sheetUrl
-}) => {
-	return (
-		<div className={styles.container}>
-			<Head>
-				<title>{name}</title>
-				<meta name="description" content={mission} />
-				<link rel="icon" href="/favicon.ico" />
-			</Head>
+}) => (
+	<div className={styles.container}>
+		<Head>
+			<title>{name}</title>
+			<meta name="description" content={mission} />
+			<link rel="icon" href="/favicon.ico" />
+		</Head>
 
-			<header>
-				<Image src={logo} alt={mission} width={100} height={100} />
-			</header>
+		<header>
+			<Image src={logo} alt={mission} width={100} height={100} />
+		</header>
 
-			<main className={styles.main}>
-				<h1 className={styles.title}>
-					Welcome to <a href={domain}>{name}!</a>
-				</h1>
-				
-				<p className={styles.description}>
-					{mission}
-				</p>
+		<main className={styles.main}>
+			<h1 className={styles.title}>
+				Welcome to <a href={domain}>{name}!</a>
+			</h1>
 
-				<p className={styles.description}>
-					{vision}
-				</p>
+			<p className={styles.description}>
+				{mission}
+			</p>
 
-				<p className={styles.description}>
-					Get started by editing{" "}
-					<a href={sheetUrl} className={styles.card}>
-						The Sheet
-					</a>
-				</p>
+			<p className={styles.description}>
+				{vision}
+			</p>
 
-				<p className={styles.description}>
-					Send us a message at: 
-					<a href={`mailto:${contactEmail}`} className={styles.card}>
-						{contactEmail}
-					</a>
-				</p>
-			</main>
-
-			<footer className={styles.footer}>
-				<h6>Powered by{" "}</h6>
-				<a
-					href="https://paratroopers.dev/"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					<span className={styles.logo}>
-						<Image src="/paratroopers-icon.svg" alt="Paratroopers Logo" width={128} height={128} />
-					</span>
+			<p className={styles.description}>
+				Get started by editing{" "}
+				<a href={sheetUrl} className={styles.card}>
+					The Sheet
 				</a>
-			</footer>
-		</div>
-	)
-}
+			</p>
 
-export const getStaticProps: GetStaticProps = async (context): Promise<GetStaticPropsResult<HomeProps>> => {
+			<p className={styles.description}>
+				Send us a message at:
+				<a href={`mailto:${contactEmail}`} className={styles.card}>
+					{contactEmail}
+				</a>
+			</p>
+		</main>
+
+		<footer className={styles.footer}>
+			<h6>Powered by{" "}</h6>
+			<a
+				href="https://paratroopers.dev/"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<span className={styles.logo}>
+					<Image src="/paratroopers-icon.svg" alt="Paratroopers Logo" width={128} height={128} />
+				</span>
+			</a>
+		</footer>
+	</div>
+)
+
+export const getStaticProps: GetStaticProps = async(): Promise<GetStaticPropsResult<HomeProps>> =>
+{
 	return {
 		revalidate: 60,
 		props: {
@@ -98,6 +97,5 @@ export const getStaticProps: GetStaticProps = async (context): Promise<GetStatic
 		},
 	}
 }
-	
 
 export default Home
