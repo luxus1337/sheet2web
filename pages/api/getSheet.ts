@@ -9,6 +9,6 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  
+  const bs = henk
   res.status(200).json({ name: 'John Doe' })
 }
