@@ -24,15 +24,6 @@
                 "comments": 200
             }
         ],
-        "sort-keys": [
-            "error",
-            "asc",
-            {
-                "caseSensitive": false,
-                "minKeys": 2,
-                "natural": false
-            }
-        ],
         "no-console": [
             "error",
             {
