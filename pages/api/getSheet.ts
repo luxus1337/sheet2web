@@ -14,34 +14,43 @@ export default async function handler(
 	res: NextApiResponse<POCSheetData>
 ): Promise<void>
 {
-	const sheets: sheets_v4.Sheets = await getSheetsAPIClient()
-
-	const spreadsheetId: string|undefined = process.env.GOOGLE_SHEETS_ID
-	if (!spreadsheetId)
-	{
-		throw new Error("Sheet key not defined correctly in .env file.")
-	}
-
-	let spreadSheet: sheets_v4.Schema$Spreadsheet = (await sheets.spreadsheets.get({
-		includeGridData: true,
-		spreadsheetId,
-	})).data
+	const spreadSheet: sheets_v4.Schema$Spreadsheet = await getSpreadSheet()
 
 	if (!spreadSheet.sheets)
 	{
 		throw new Error("No Sheets")
-
 	}
+
+	// @TODO Put POC in constant or make dynamic
 	const pocSheet: sheets_v4.Schema$Sheet | undefined = findSheetByName(spreadSheet.sheets, "POC")
 
-	if (!pocSheet || !pocSheet.data)
+	if (!pocSheet)
 	{
 		throw new Error("No POC")
 	}
 
+	let cellData: sheets_v4.Schema$CellData[] = getCellDataForSheet(pocSheet)
+	let cellData2D: sheets_v4.Schema$CellData[][] = convertTo2DCellDataArray(cellData)
+
+	const mergeData: sheets_v4.Schema$GridRange[] = []
+	pocSheet.merges?.forEach(mergeDataObject=>
+	{
+		mergeData.push(mergeDataObject)
+	})
+
+	res.status(200).json({ cellData2D, mergeData, })
+}
+
+function getCellDataForSheet(sheet: sheets_v4.Schema$Sheet): sheets_v4.Schema$CellData[]
+{
 	let cellData: sheets_v4.Schema$CellData[] = []
 
-	pocSheet.data.forEach(rowDataObject=>
+	if (!sheet.data)
+	{
+		throw new Error("No data in requested sheet")
+	}
+
+	sheet.data.forEach(rowDataObject=>
 	{
 		if (!rowDataObject.rowData)
 		{
@@ -61,7 +70,11 @@ export default async function handler(
 			})
 		})
 	})
+	return cellData
+}
 
+function convertTo2DCellDataArray(cellData: sheets_v4.Schema$CellData[]): sheets_v4.Schema$CellData[][]
+{
 	let cellData2D: sheets_v4.Schema$CellData[][] = []
 
 	for (let i: number = 0; i < cellData.length; i++)
@@ -75,12 +88,21 @@ export default async function handler(
 		}
 		cellData2D[row].push(data)
 	}
+	return cellData2D
+}
 
-	const mergeData: sheets_v4.Schema$GridRange[] = []
-	pocSheet.merges?.forEach(mergeDataObject=>
+async function getSpreadSheet(): Promise<sheets_v4.Schema$Spreadsheet>
+{
+	const sheets: sheets_v4.Sheets = await getSheetsAPIClient()
+
+	const spreadsheetId: string|undefined = process.env.GOOGLE_SHEETS_ID
+	if (!spreadsheetId)
 	{
-		mergeData.push(mergeDataObject)
-	})
+		throw new Error("Sheet key not defined correctly in .env file.")
+	}
 
-	res.status(200).json({ cellData2D, mergeData, })
+	return (await sheets.spreadsheets.get({
+		includeGridData: true,
+		spreadsheetId,
+	})).data
 }
