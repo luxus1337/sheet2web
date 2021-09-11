@@ -52,7 +52,7 @@ const Home: NextPage<HomeProps> = ({
 				</p>
 
 				<p className={styles.description}>
-					Get started by editing{' '}
+					Get started by editing{" "}
 					<a href={sheetUrl} className={styles.card}>
 						The Sheet
 					</a>
@@ -67,7 +67,7 @@ const Home: NextPage<HomeProps> = ({
 			</main>
 
 			<footer className={styles.footer}>
-				<h6>Powered by{' '}</h6>
+				<h6>Powered by{" "}</h6>
 				<a
 					href="https://paratroopers.dev/"
 					target="_blank"
