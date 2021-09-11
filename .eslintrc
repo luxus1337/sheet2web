@@ -24,13 +24,6 @@
                 "comments": 200
             }
         ],
-        "sort-imports": [
-            "error",
-            {
-                "allowSeparatedGroups": true,
-                "ignoreCase": true
-            }
-        ],
         "sort-keys": [
             "error",
             "asc",
